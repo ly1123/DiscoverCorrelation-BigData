@@ -11,7 +11,7 @@ from mappers import mapper_311, mapper_collision, mapper_property, mapper_weathe
 sc = SparkContext('local')
 spark = SparkSession.builder.appName("Python df").config("some-config", "some-value").getOrCreate()
 
-# data for transform zipcode 
+# data for transforming zipcode 
 # dict: with key=grid and value=polygons(index) of corresponding zip code
 with open('grid_zipcode_dict.pickle', 'rb') as f:
 	grid_zipcode_dict = pickle.load(f)
@@ -25,7 +25,6 @@ with open('polys_zipcode.pickle', 'rb') as f:
 with open('polys_zipcode_dict.pickle', 'rb') as f:
 	polys_zipcode_dict = pickle.load(f)
 zipcode = (grid_zipcode_dict, polys_zipcode, polys_zipcode_dict, bound_zipcode)
-
 '''
 #citi_bike
 rdd = sc.textFile(sys.argv[1])

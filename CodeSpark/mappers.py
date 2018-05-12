@@ -416,7 +416,7 @@ def mapper_crime(line, zipcode=None, neibor=None):
 	key = '{0:d} {1:d} {2:d} {3:d} {4:d}'.format(Created_Year, Created_Month, Created_Day, Created_Hour, -1)
 	return Row(key=key, KY_CD=KY_CD, PD_CD=PD_CD, LAW_CAT_CD=LAW_CAT_CD, ADDR_PCT_CD=ADDR_PCT_CD, CRM_ATPT_CPTD_CD=CRM_ATPT_CPTD_CD)
 
-def mapper_taxi(line):
+def mapper_taxi(line, zipcode=None, neibor=None):
 	line = line.strip()
 	#entry = line.split(',')
 	Pre_string=io.StringIO(line)
@@ -425,7 +425,7 @@ def mapper_taxi(line):
 		entry=i
 	if len(entry)< 17:
 		key = '{0:d} {1:d} {2:d} {3:d} {4:d} {5:d}'.format(0, 0, 0, 0, -1, -1)
-		return Row(key=key,v_id=np.nan,drh=np.nan, passenger_count=np.nan, trip_d=np.nan, pay_type=np.nan, fare_amt=np.nan, tip_amt = np.nan, tolls_amt=np.nan, total_amt = np.nan)
+		return Row(key=key,v_id=None,drh=None, passenger_count=None, trip_d=None, pay_type=None, fare_amt=None, tip_amt = None, tolls_amt=None, total_amt = None)
 	v_id = entry[0].strip() # vendor id
 	try:
 		ptime = time.strptime(entry[1].strip(), '%Y-%m-%d %H:%M:%S') #start time for a trip
