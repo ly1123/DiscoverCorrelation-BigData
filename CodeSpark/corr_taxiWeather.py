@@ -17,15 +17,15 @@ spark = SparkSession.builder.appName("Python df").config("some-config", "some-va
 df_taxi = spark.read.format('csv').options(header='true', inferschema='true').load(sys.argv[1])
 rdd = df_taxi.rdd.map(lambda x: Row(key=' '.join(x.key.split(' ')[:3]), total_amt = x.total_amt, drh =x.drh, passenger_count = x.passenger_count, trip_d=x.trip_d, pay_type= x.pay_type, fare_amt =x.fare_amt, tip_amt = x.tip_amt, tolls_amt = x.tolls_amt))
 schema = StructType([
-        StructField("key", StringType(), True),
-        StructField("total_amt", FloatType(), True),
-        StructField("passenger_count", FloatType(), True),
-        StructField("drh", FloatType(), True),
-        StructField("trip_d", FloatType(), True),
-        StructField("pay_type", FloatType(), True),
-        StructField("fare_amt", FloatType(), True),
-        StructField("tip_amt", FloatType(), True),
-        StructField("tolls_amt", FloatType(), True)])
+	StructField("key", StringType(), True),
+	StructField("total_amt", FloatType(), True),
+	StructField("passenger_count", FloatType(), True),
+	StructField("drh", FloatType(), True),
+	StructField("trip_d", FloatType(), True),
+	StructField("pay_type", FloatType(), True),
+	StructField("fare_amt", FloatType(), True),
+	StructField("tip_amt", FloatType(), True),
+	StructField("tolls_amt", FloatType(), True)])
 df_taxi = spark.createDataFrame(rdd)
 df_taxi.createOrReplaceTempView("SQLdf")
 dfAgg = spark.sql('SELECT key, COUNT(*) as counts, AVG(passenger_count) as avg_passenger, SUM(passenger_count) as passenger_count, AVG(trip_d) as avg_distance, SUM(trip_d) as sum_distance, AVG(tip_amt) as avg_tip, SUM(tip_amt) as sum_tip, SUM(tolls_amt) as sum_tolls, AVG(total_amt) as avg_total_amt, SUM(total_amt) as total_amt FROM SQLdf GROUP BY key')
