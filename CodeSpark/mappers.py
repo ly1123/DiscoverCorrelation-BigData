@@ -415,3 +415,61 @@ def mapper_crime(line, zipcode=None, neibor=None):
 	Created_Hour=CMPLNT_FR_TM[0:2]
 	key = '{0:d} {1:d} {2:d} {3:d} {4:d}'.format(Created_Year, Created_Month, Created_Day, Created_Hour, -1)
 	return Row(key=key, KY_CD=KY_CD, PD_CD=PD_CD, LAW_CAT_CD=LAW_CAT_CD, ADDR_PCT_CD=ADDR_PCT_CD, CRM_ATPT_CPTD_CD=CRM_ATPT_CPTD_CD)
+
+def mapper_taxi(line):
+	line = line.strip()
+	#entry = line.split(',')
+	Pre_string=io.StringIO(line)
+	reads=reader(Pre_string)
+	for i in reads:
+		entry=i
+	if len(entry)< 17:
+		key = '{0:d} {1:d} {2:d} {3:d} {4:d} {5:d}'.format(0, 0, 0, 0, -1, -1)
+		return Row(key=key,v_id=np.nan,drh=np.nan, passenger_count=np.nan, trip_d=np.nan, pay_type=np.nan, fare_amt=np.nan, tip_amt = np.nan, tolls_amt=np.nan, total_amt = np.nan)
+	v_id = entry[0].strip() # vendor id
+	try:
+		ptime = time.strptime(entry[1].strip(), '%Y-%m-%d %H:%M:%S') #start time for a trip
+	except:
+		try:
+			ptime = time.strptime(entry[1].strip(), '%m/%d/%Y %H:%M:%S') # if the format of data is different
+		except:
+			ptime = (0, 0, 0, 0)
+	pyear = ptime[0]#year
+	pmon = ptime[1]#month
+	pday = ptime[2]
+	ph = ptime[3]
+	pay_type = entry[11].strip()
+	if pyear < 2015: # if the year is before 2015
+		if v_id =='VTS':  #change vendor id to numbers
+			v_id = 2
+		else:
+			v_id = 1
+		if pay_type =='CRD':#change pay type to number
+			pay_type = 1
+		elif pay_type =='CSH':
+			pay_type = 2
+		elif pay_type =='NOC':
+			pay_type = 3
+		elif pay_type =='DIS':
+			pay_type = 4
+		elif pay_type =='UNK':
+			pay_type = 5
+		else:
+			pay_type = 6
+		total_amt = entry[17].strip()
+	elif pyear > 2016:
+		total_amt = entry[17].strip()#for 2017 the data has one less columns 
+	else:
+		total_amt = entry[18].strip()
+	drtime = time.strptime(entry[2].strip(), '%Y-%m-%d %H:%M:%S') #drop off time
+	dryear = drtime[0]
+	drmon = drtime[1]
+	drday = drtime[2]
+	drh = drtime[3]
+	pg_count = entry[3].strip() #passenger count
+	trip_d = entry[4].strip() #trip distance
+	fare_amt = entry[12].strip() # fare amount
+	tip_amt = entry[15].strip() # tip amount
+	tolls_amt = entry[16].strip() #tolls amount
+	key = '{0:d} {1:d} {2:d} {3:d} {4:d}'.format(pyear, pmon, pday, ph, -1)
+	return Row(key=key,v_id=v_id,drh=drh, passenger_count=pg_count, trip_d=trip_d, pay_type=pay_type, fare_amt=fare_amt, tip_amt = tip_amt, tolls_amt = tolls_amt, total_amt = total_amt)
