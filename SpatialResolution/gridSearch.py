@@ -115,7 +115,7 @@ if __name__ == "__main__":
 		polys_zipcode = pickle.load(f)	
 	with open('polys_zip_dict.pickle', 'rb') as f:
 		polys_zipcode_dict = pickle.load(f)
-	grid_zipcode_dict, bound_zipcode= build_grid(polys_zipcode, xs, ys)
+	grid_zipcode_dict, bound_zipcode= build_grid(polys_zipcode, xs, ys) #build grid search for zipcode
 	with open('grid_zip_dict.pickle', 'wb') as f:
 		pickle.dump(grid_zipcode_dict, f)
 	with open('grid_zip_dict.pickle', 'rb') as f:
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 		polys_neibor = pickle.load(f)	
 	with open('polys_neibor_dict.pickle', 'rb') as f:
 		polys_neibor_dict = pickle.load(f)
-	grid_neibor_dict, bound_neibor = build_grid(polys_neibor, xs, ys)
+	grid_neibor_dict, bound_neibor = build_grid(polys_neibor, xs, ys) #build grid search for neighborhood
 	with open('grid_neibor_dict.pickle', 'wb') as f:
 		pickle.dump(grid_neibor_dict, f)
 	with open('grid_neibor_dict.pickle', 'rb') as f:
