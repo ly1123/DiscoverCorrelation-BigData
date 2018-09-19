@@ -30,7 +30,7 @@ Contains main python files that includes mappers.py, preprocess.py and correlati
 
 ## SpatialResolution
 
-Contains 
+Contains files to transform between longitude and latitude.
 
 ## Results 
 
